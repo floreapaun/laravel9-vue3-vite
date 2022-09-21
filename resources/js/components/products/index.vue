@@ -23,10 +23,6 @@ const newProduct = () => {
   router.push('/product/new')
 }
 
-const productPhoto = () => {
-  return "upload/"
-}
-
 const onEdit = (id) => {
   router.push("/product/edit/" + id)
 }
@@ -51,7 +47,6 @@ const deleteProduct = (id) => {
         })
   })
 }
-
 </script>
 
 <template>
@@ -86,31 +81,34 @@ const deleteProduct = (id) => {
               </p>
           </div>
   
-          <!-- product 1 -->
           <div v-if="products.length > 0">
             <div class="table--items products__list__item" v-for="item in products" :key="item.id">
 
                 <div class="products__list__item--imgWrapper">
-                    <img class="products__list__item--img" :src='productPhoto() + item.photo' style="height: 40px;">
+                    <img class="products__list__item--img" :src='"/upload/" + item.photo' style="height: 40px;">
                 </div>
 
                 <p class="table--items--col2">
                   {{ item.name }}
                 </p>
+
                 <p class="table--items--col2">
                   {{ item.type }}
                 </p>
+
                 <p class="table--items--col3">
                   {{ item.quantity }}
                 </p>     
+
                 <div>     
-                  <button class="btn btn-success" @click="onEdit(item.id)">
-                    Edit
+                  <button class="btn-icon btn-icon-success" @click="onEdit(item.id)">
+                    <i class="fas fa-pencil-alt"></i>
                   </button>
-                  <button class="btn btn-danger" @click="deleteProduct(item.id)">
-                    Remove
+                  <button class="btn-icon btn-icon-danger" @click="deleteProduct(item.id)">
+                    <i class="far fa-trash-alt"></i>
                   </button>
                 </div>
+
             </div>
           </div>
 

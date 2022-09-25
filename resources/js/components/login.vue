@@ -48,8 +48,7 @@ export default{
                     router.push({name:'Dashboard'})
                 }
             }).catch(e=>{
-                console.log(e)
-                //error.value = e.response.data.message
+                error.value = e.response.data.message
             })
         }
 

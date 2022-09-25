@@ -50,7 +50,6 @@ export default{
             await axios.post('/api/register',form).then(res=>{
                 if(res.data.success){
                     localStorage.setItem('token',res.data.data.token)
-                    console.log("register back from api")
                     router.push({name:'Dashboard'})
                 }
             }).catch(e=>{

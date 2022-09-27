@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,4 @@ Route::post('/add_product', [ProductController::class, 'add_product']);
 Route::get('/get_edit_product/{id}', [ProductController::class, 'get_edit_product']);
 Route::post('/update_product/{id}', [ProductController::class, 'update_product']);
 Route::get('/delete_product/{id}', [ProductController::class, 'delete_product']);
+Route::get('/get_all_category', [CategoryController::class, 'get_all_category']);

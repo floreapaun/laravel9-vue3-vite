@@ -1,8 +1,11 @@
 <script setup>
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { useRouter} from 'vue-router'
 
   const router = useRouter()
+
+  let categories = ref({})
+  let selectedCategory = ref()
 
   let form = ref({
     name: '',
@@ -12,6 +15,15 @@
     quantity: '',
     price: '',
   })
+
+  onMounted(async () => {
+    getCategories()
+  })
+
+  const getCategories = async () => {
+    let response = await axios.get(`/api/get_all_category/`)
+    categories.value = response.data.categories
+  }
 
   const getPhoto = () => {
     let photo = "/upload/image.png"
@@ -41,7 +53,7 @@
     formData.append('name', form.value.name) 
     formData.append('description', form.value.description) 
     formData.append('photo', form.value.photo) 
-    formData.append('type', form.value.type) 
+    formData.append('type', selectedCategory.value) 
     formData.append('quantity', form.value.quantity) 
     formData.append('price', form.value.price) 
 
@@ -58,7 +70,7 @@
 
         toast.fire({
           icon: "success",
-          title: "Product add successfully!",
+          title: "Product added successfully!",
         })
 
       })
@@ -121,11 +133,15 @@
                   <!-- Product unit -->
                   <div class="my-3">
                       <p>Product type</p>
-                      <input type="text" class="input" v-model="form.type">
+                      <select v-model="selectedCategory">
+                        <option v-for="category in categories" :key="category.id" :value="category.id">
+                          {{ category.name }}
+                        </option>
+                      </select>
                   </div>
                   <hr>
 
-                  <!-- Product invrntory -->
+                  <!-- Product inventory -->
                   <div class="my-3">
                       <p>Inventory</p>
                       <input type="text" class="input" v-model="form.quantity">

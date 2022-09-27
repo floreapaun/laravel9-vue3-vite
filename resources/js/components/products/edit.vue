@@ -5,6 +5,9 @@
 
   const router = useRouter()
 
+  let categories = ref({})
+  let selectedCategory = ref()
+
   let form = ref({
     id: '',
     name: '',
@@ -17,6 +20,7 @@
 
   onMounted(async () => {
     getSingleProduct()
+    getCategories()
   })
 
   const props = defineProps({
@@ -25,6 +29,11 @@
       default: ''
     }
   })
+
+  const getCategories = async () => {
+    let response = await axios.get(`/api/get_all_category/`)
+    categories.value = response.data.categories
+  }
 
   const getSingleProduct = async () => {
     let response = await axios.get(`/api/get_edit_product/${props.id}`)
@@ -59,7 +68,7 @@
     formData.append('name', form.value.name) 
     formData.append('description', form.value.description) 
     formData.append('photo', form.value.photo) 
-    formData.append('type', form.value.type) 
+    formData.append('type', selectedCategory.value) 
     formData.append('quantity', form.value.quantity) 
     formData.append('price', form.value.price) 
 
@@ -76,7 +85,7 @@
 
         toast.fire({
           icon: "success",
-          title: "Product update successfully!",
+          title: "Product updated successfully!",
         })
 
       })
@@ -92,14 +101,7 @@
        
        <div class="products__create__titlebar dflex justify-content-between align-items-center">
            <div class="products__create__titlebar--item">
-               
                <h1 class="my-1">Edit Product</h1>
-           </div>
-           <div class="products__create__titlebar--item">
-               
-               <button class="btn btn-secondary ml-1" @click="updateProduct()">
-                   Save
-               </button>
            </div>
        </div>
 
@@ -140,12 +142,16 @@
                    
                    <!-- Product unit -->
                    <div class="my-3">
-                       <p>Product type</p>
-                       <input type="text" class="input" v-model="form.type">
-                   </div>
+                      <p>Product type</p>
+                      <select v-model="selectedCategory">
+                        <option v-for="category in categories" :key="category.id" :value="category.id">
+                          {{ category.name }}
+                        </option>
+                      </select>
+                  </div>
                    <hr>
 
-                   <!-- Product invrntory -->
+                   <!-- Product inventory -->
                    <div class="my-3">
                        <p>Inventory</p>
                        <input type="text" class="input" v-model="form.quantity">

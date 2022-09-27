@@ -5,12 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 use Image;
 
 class ProductController extends Controller
 {
     public function get_all_product(){
-        $products = Product::all();
+        $products = Product::with('category')->get();
         return response()->json([
             "products" => $products
         ], 200);
@@ -35,7 +36,7 @@ class ProductController extends Controller
             $product->photo = "image.png";
         }
 
-        $product->type = $request->type;
+        $product->category_id = $request->type;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();      
@@ -72,7 +73,7 @@ class ProductController extends Controller
             $product->photo = "image.png";
         }
 
-        $product->type = $request->type;
+        $product->category_id = $request->type;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();

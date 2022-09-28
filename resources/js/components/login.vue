@@ -5,9 +5,6 @@
 
                 <h2>Login</h2>
 
-                <p class="text-danger" v-if="error">{{ error }}</p>
-
-
                 <form @submit.prevent="login">
                     <div class="form-group">
                         <label for="email">Email Address:</label>
@@ -25,38 +22,21 @@
     </div>
 </template>
 
-<script>
-import { reactive,ref } from 'vue'
+<script setup>
+import { reactive } from 'vue'
+import { useUserStore } from '../stores/user'
 import { useRouter } from "vue-router"
-import axios from 'axios';
 
-export default{
-    setup(){
-        const router = useRouter()
+const userStore = useUserStore()
+const router = useRouter()
 
-        let form = reactive({
-            email: '',
-            password: ''
-        });
+let form = reactive({
+    email: '',
+    password: ''
+});
 
-        let error = ref('')
-
-        const login = async() =>{
-            await axios.post('/api/login',form).then(res=>{
-                if(res.data.success){
-                    localStorage.setItem('token',res.data.data.token)
-                    router.push({name:'Dashboard'})
-                }
-            }).catch(e=>{
-                error.value = e.response.data.message
-            })
-        }
-
-        return{
-            form,
-            login,
-            error
-        }
-    }
+const login = async() => {
+    await userStore.login(form)
+    router.push({name:'Dashboard'})
 }
 </script>

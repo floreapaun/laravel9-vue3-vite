@@ -4,10 +4,7 @@
             <div class="col-sm-6 mt-4">
 
                 <h2>Register</h2>
-                <p class="text-danger" v-for="error in errors" :key="error">
-                    <span v-for="err in error" :key="err">{{ err }}</span>
-                </p>
-
+             
                 <form @submit.prevent="register">
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -33,34 +30,24 @@
         </div>
     </div>
 </template>
-<script>
-import { reactive,ref } from 'vue'
+
+<script setup>
+import { reactive } from 'vue'
+import { useUserStore } from '../stores/user'
 import { useRouter } from "vue-router"
-export default{
-    setup(){
-        const router = useRouter()
-        let form = reactive({
-            name :'',
-            email: '',
-            password: '',
-            c_password: '',
-        });
-        let errors = ref([])
-        const register = async() =>{
-            await axios.post('/api/register',form).then(res=>{
-                if(res.data.success){
-                    localStorage.setItem('token',res.data.data.token)
-                    router.push({name:'Dashboard'})
-                }
-            }).catch(e=>{
-                errors.value = e.response.data.message
-            })
-        }
-        return{
-            form,
-            register,
-            errors
-        }
-    }
+
+const userStore = useUserStore()
+const router = useRouter()
+
+let form = reactive({
+    name :'',
+    email: '',
+    password: '',
+    c_password: '',
+});
+
+const register = async() => {
+    await userStore.register(form)
+    router.push({name:'Dashboard'})
 }
 </script>

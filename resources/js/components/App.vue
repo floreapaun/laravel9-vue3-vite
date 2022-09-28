@@ -1,25 +1,24 @@
 <script setup>
-  import { ref } from 'vue'
   import { useRouter } from "vue-router"
+  import { useUserStore } from '../stores/user'
+  import { storeToRefs } from 'pinia'
 
   const router = useRouter()
-
-  const token = ref(null);
-  const clearToken = () => {
-    token.value = null;
-    window.localStorage.removeItem('token')
-  }
+  const userStore = useUserStore()
+  const { getToken } = storeToRefs(userStore)
 
   const logOut = () => {
-    clearToken()
+    userStore.logout()
     router.push({name:'Login'})
   }
+
+  let isLoggedIn = getToken
 </script>
 
 <template>
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <ul class="navbar-nav">
-        <li class="nav-item">
+        <li class="nav-item" v-if="!isLoggedIn">
             <router-link class="text-white" :to="{ name: 'Login' }">Login</router-link>
         </li>
         <li class="nav-item">
@@ -28,7 +27,7 @@
         <li class="nav-item">
             <router-link class="text-white ml-2" :to="{ name: 'Dashboard' }">Dashboard</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="isLoggedIn">
           <router-link class="text-white" :to="{}" @click="logOut">Logout</router-link>
         </li>
     </ul>

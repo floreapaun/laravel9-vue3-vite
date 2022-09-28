@@ -22,7 +22,3 @@ app.use(createPinia())
 const userStore = useUserStore()
 app.use(router)
 app.mount("#app")
-
-
-
-//app.use(router).mount("#app")

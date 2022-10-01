@@ -8,6 +8,13 @@ import router from './router';
 import App from './components/App.vue'
 import { useUserStore } from './stores/user'
 
+const app = createApp(App)
+
+app.use(createPinia())
+const userStore = useUserStore()
+app.use(router)
+app.mount("#app")
+
 window.Swal = Swal
 const toast = Swal.mixin({
   toast: true,
@@ -15,10 +22,3 @@ const toast = Swal.mixin({
   timer: 10000,
 })
 window.toast = toast
-
-const app = createApp(App)
-
-app.use(createPinia())
-const userStore = useUserStore()
-app.use(router)
-app.mount("#app")

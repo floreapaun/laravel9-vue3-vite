@@ -13,14 +13,15 @@
     name: '',
     description: '',
     photo: '',
-    type: '',
+    category_id: '',
     quantity: '',
     price: '',
   })
 
   onMounted(async () => {
-    getSingleProduct()
-    getCategories()
+    await getSingleProduct()
+    await getCategories()
+    selectedCategory.value = form.value.category_id
   })
 
   const props = defineProps({
@@ -48,6 +49,7 @@
       else
         photo = '/upload/' + form.value.photo
     }
+    console.log("getPhoto: ", form.value.photo)
     return photo
   }
   
@@ -59,6 +61,7 @@
       return false
     reader.onloadend = (file) => {
       form.value.photo = reader.result
+      console.log("onloadend: ", form.value.photo)
     }
     reader.readAsDataURL(file)
   }
@@ -68,16 +71,18 @@
     formData.append('name', form.value.name) 
     formData.append('description', form.value.description) 
     formData.append('photo', form.value.photo) 
-    formData.append('type', selectedCategory.value) 
+    formData.append('category_id', selectedCategory.value) 
     formData.append('quantity', form.value.quantity) 
     formData.append('price', form.value.price) 
+
+    console.log("formData:", formData)
 
     axios.post(`/api/update_product/${form.value.id}`, formData)
       .then( response => {
         form.value.name = ''
         form.value.description = '',
         form.value.photo = '',
-        form.value.type = '',
+        form.value.category_id = '',
         form.value.quantity = '',
         form.value.price = '';
 
@@ -143,7 +148,7 @@
                    <!-- Product unit -->
                    <div class="my-3">
                       <p>Product type</p>
-                      <select v-model="selectedCategory">
+                      <select ref="s" v-model="selectedCategory">
                         <option v-for="category in categories" :key="category.id" :value="category.id">
                           {{ category.name }}
                         </option>

@@ -36,7 +36,7 @@ class ProductController extends Controller
             $product->photo = "image.png";
         }
 
-        $product->category_id = $request->type;
+        $product->category_id = $request->category_id;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();      
@@ -62,18 +62,17 @@ class ProductController extends Controller
             $img = Image::make($request->photo)->resize(200, 200);
             $upload_path = public_path() . "/upload/";
             $img->save($upload_path . $name);
+
+            //Delete the old photo
+            //image.png is the default photo
             $image = $upload_path . $product->photo;
-            if (file_exists($image))
+            if (file_exists($image) && $product->photo != 'image.png')
                 unlink($image);
-            else
-                $name = $product->photo;
+
             $product->photo = $name;
         }
-        else {
-            $product->photo = "image.png";
-        }
 
-        $product->category_id = $request->type;
+        $product->category_id = $request->category_id;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();

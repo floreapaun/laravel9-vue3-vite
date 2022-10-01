@@ -11,7 +11,7 @@
     name: '',
     description: '',
     photo: '',
-    type: '',
+    category_id: '',
     quantity: '',
     price: '',
   })
@@ -53,7 +53,7 @@
     formData.append('name', form.value.name) 
     formData.append('description', form.value.description) 
     formData.append('photo', form.value.photo) 
-    formData.append('type', selectedCategory.value) 
+    formData.append('category_id', selectedCategory.value) 
     formData.append('quantity', form.value.quantity) 
     formData.append('price', form.value.price) 
 
@@ -62,7 +62,7 @@
         form.value.name = ''
         form.value.description = '',
         form.value.photo = '',
-        form.value.type = '',
+        form.value.category_id = '',
         form.value.quantity = '',
         form.value.price = '';
 
@@ -89,11 +89,6 @@
       <div class="products__create__titlebar dflex justify-content-between align-items-center">
           <div class="products__create__titlebar--item">    
               <h1 class="my-1">Add Product</h1>
-          </div>
-          <div class="products__create__titlebar--item">  
-              <button class="btn btn-secondary ml-1" >
-                  Save
-              </button>
           </div>
       </div>
 
